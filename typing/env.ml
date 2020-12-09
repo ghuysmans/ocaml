@@ -1501,11 +1501,10 @@ let module_declaration_address env id presence md =
       EnvLazy.create_forced (Aident id)
 
 let is_identchar c =
-  (* This should be kept in sync with the [identchar_latin1] character class
+  (* This should be kept in sync with the [identchar] character class
      in [lexer.mll] *)
   match c with
-  | 'A'..'Z' | 'a'..'z' | '_' | '\192'..'\214'
-  | '\216'..'\246' | '\248'..'\255' | '\'' | '0'..'9' ->
+  | 'A'..'Z' | 'a'..'z' | '_' | '\'' | '0'..'9' ->
     true
   | _ ->
     false
@@ -2116,18 +2115,13 @@ let read_signature modname filename =
   | Mty_signature sg -> sg
   | Mty_ident _ | Mty_functor _ | Mty_alias _ -> assert false
 
-let is_identchar_latin1 = function
-  | 'A'..'Z' | 'a'..'z' | '_' | '\192'..'\214' | '\216'..'\246'
-  | '\248'..'\255' | '\'' | '0'..'9' -> true
-  | _ -> false
-
 let unit_name_of_filename fn =
   match Filename.extension fn with
   | ".cmi" -> begin
       let unit =
         String.capitalize_ascii (Filename.remove_extension fn)
       in
-      if String.for_all is_identchar_latin1 unit then
+      if String.for_all is_identchar unit then
         Some unit
       else
         None
