@@ -39,59 +39,93 @@ exception Error of error * Location.t;;
 let keyword_table =
   create_hashtable 149 [
     "and", AND;
+    "et", AND;
     "as", AS;
     "assert", ASSERT;
+    "supposons", ASSERT;
     "begin", BEGIN;
     "class", CLASS;
+    "classe", CLASS;
     "constraint", CONSTRAINT;
     "do", DO;
+    "faire", DO;
     "done", DONE;
+    "fait", DONE;
     "downto", DOWNTO;
+    "descendant vers", DOWNTO;
     "else", ELSE;
+    "sinon", ELSE;
     "end", END;
+    "fin", END;
     "exception", EXCEPTION;
     "external", EXTERNAL;
+    "externe", EXTERNAL;
     "false", FALSE;
+    "faux", FALSE;
     "for", FOR;
+    "pour", FOR;
     "fun", FUN;
+    "fon", FUN;
     "function", FUNCTION;
+    "fonction", FUNCTION;
     "functor", FUNCTOR;
+    "foncteur", FUNCTOR;
     "if", IF;
+    "si", IF;
     "in", IN;
+    "dans", IN;
     "include", INCLUDE;
+    "inclure", INCLUDE;
     "inherit", INHERIT;
     "initializer", INITIALIZER;
+    "initialisation", INITIALIZER;
     "lazy", LAZY;
+    "flemme", LAZY;
     "let", LET;
+    "soit", LET;
     "match", MATCH;
+    "rattache", MATCH;
     "method", METHOD;
     "module", MODULE;
     "mutable", MUTABLE;
+    "muable", MUTABLE;
     "new", NEW;
     "nonrec", NONREC;
     "object", OBJECT;
+    "objet", OBJECT;
     "of", OF;
+    "de", OF;
     "open", OPEN;
+    "ouvrir", OPEN;
     "or", OR;
+    "ou", OR;
 (*  "parser", PARSER; *)
     "private", PRIVATE;
     "rec", REC;
     "sig", SIG;
     "struct", STRUCT;
     "then", THEN;
+    "alors", THEN;
     "to", TO;
     "true", TRUE;
+    "vrai", TRUE;
     "try", TRY;
+    "tente", TRY;
     "type", TYPE;
     "val", VAL;
     "virtual", VIRTUAL;
+    "virtuelle", VIRTUAL;
     "when", WHEN;
+    "quand", WHEN;
     "while", WHILE;
+    "tant que", WHILE;
     "with", WITH;
+    "avec", WITH;
 
     "lor", INFIXOP3("lor"); (* Should be INFIXOP2 *)
     "lxor", INFIXOP3("lxor"); (* Should be INFIXOP2 *)
     "mod", INFIXOP3("mod");
+    "modulo", INFIXOP3("mod");
     "land", INFIXOP3("land");
     "lsl", INFIXOP4("lsl");
     "lsr", INFIXOP4("lsr");
@@ -381,6 +415,22 @@ rule token = parse
   | "?" (lowercase identchar * as name) ':'
       { check_label_name lexbuf name;
         OPTLABEL name }
+  | "appelé" { AS }
+  | "contraint par" { CONSTRAINT }
+  | "début" { BEGIN }
+  | "hériter de" { INHERIT }
+  | "méthode" { METHOD }
+  | "crée" { NEW }
+  | "non récursif" { NONREC }
+  | "privé" { PRIVATE }
+  | "réc" { REC }
+  | "jusqu'à" { TO }
+  | "ou bit à bit" { INFIXOP3("lor") }
+  | "ou exclusif bit à bit" { INFIXOP3("lxor") }
+  | "et bit à bit" { INFIXOP3("land") }
+  | "décalé à gauche de" { INFIXOP4("lsl") }
+  | "décalé à droite de" { INFIXOP4("lsr") }
+  | "décalé à droite mais signé de" { INFIXOP4("asr") }
   | lowercase identchar * as name
       { try Hashtbl.find keyword_table name
         with Not_found -> LIDENT name }
